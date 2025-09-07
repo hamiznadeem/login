@@ -74,9 +74,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <!-- Profile Header -->
     <section class="max-w-6xl mx-auto">
         <div class="relative">
-            <img src="<?php echo "$row2[cover_photo]" ?>" alt="Cover" class="w-full h-100 sm:h-72 md:h-80 object-cover">
+            <img src="<?php echo "$row2[cover_img]" ?>" alt="Cover" class="w-full h-100 sm:h-72 md:h-80 object-cover">
             <div class="absolute -bottom-10 left-6 flex items-end gap-4">
-                <img src="<?php echo "$row2[profile_Img]" ?>" alt="Avatar"
+                <img src="<?php echo "$row2[profile_img]" ?>" alt="Avatar"
                     class="w-28 h-28 md:w-36 md:h-36 rounded-full ring-4 ring-black object-cover shadow-soft">
                 <div class="mb-2">
                     <h1 class="text-2xl md:text-3xl font-bold"><?php echo "$row[fname]" ." ". "$row[surname]" ?></h1>
@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <aside class="md:col-span-1 space-y-6">
             <!-- About Card -->
             <section class="bg-fb.card rounded-2xl p-5 shadow-soft">
-                <h2 class="text-lg font-semibold mb-3">Intro</h2>
+                <h2 class="text-lg font-semibold mb-3">BIO</h2>
                 <p class="text-white/80 leading-relaxed"><?php echo "$row2[bio]"?></p>
                 <ul class="mt-4 space-y-2 text-white/70 text-sm">
                     <li class="flex items-center gap-2">
@@ -121,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 d="M4.5 4.5A1.5 1.5 0 0 1 6 3h12a1.5 1.5 0 0 1 1.5 1.5V18a3 3 0 0 1-3 3h-9A4.5 4.5 0 0 1 3 16.5v-9A3 3 0 0 1 6 4.5h12V18h-1.5a1.5 1.5 0 0 1-1.5-1.5V6H6A1.5 1.5 0 0 0 4.5 7.5v9A3 3 0 0 0 7.5 19.5H15"
                                 clip-rule="evenodd" />
                         </svg>
-                        <a href="#" class="underline hover:no-underline" target="_blank" rel="noreferrer">Portfolio</a>
+                        <a href="#" class="hover:underline" target="_blank" rel="noreferrer">Portfolio: <span class="text-white">www.porfolio.com</span></a>
                     </li>
                 </ul>
             </section>
@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Composer -->
             <div class="bg-fb.card rounded-2xl p-5 shadow-soft">
                 <div class="flex gap-3">
-                    <img src="<?php echo "$row2[profile_Img]" ?>" class="w-10 h-10 rounded-full" alt="">
+                    <img src="<?php echo "$row2[profile_img]" ?>" class="w-10 h-10 rounded-full" alt="">
                     <form class="flex-1">
                         <input name="post_text" placeholder="What's on your mind, <?php echo "$row[fname]" ." ". "$row[surname]" ?>?"
                             class="w-full bg-white/10 focus:bg-white/15 transition rounded-xl px-4 py-3 outline-none" />
@@ -175,7 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <article class="bg-fb.card rounded-2xl shadow-soft overflow-hidden">
                 <!-- Post header -->
                 <div class="p-5 flex items-start gap-3">
-                    <img src="<?php echo "$row2[profile_Img]" ?>" class="w-11 h-11 rounded-full" alt="">
+                    <img src="<?php echo "$row2[profile_img]" ?>" class="w-11 h-11 rounded-full" alt="">
                     <div class="flex-1">
                         <div class="flex items-center gap-2">
                             <a href="#" class="font-semibold hover:underline"></a>
@@ -186,7 +186,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </p>
                     </div>
                 </div>
-                <img src="<?php echo "$row2[post_image]" ?>" class="w-full max-h-[550px] object-cover" alt="">
+                <img src="<?php echo "$row2[post_img]" ?>" class="w-full max-h-[550px] object-cover" alt="">
 
                 <!-- Post actions -->
                 <div class="px-5 py-3 border-t border-white/10 text-white/70 text-sm">
@@ -203,7 +203,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <!-- Comments mock -->
                 <div class="px-5 pb-5">
                     <div class="mt-3 flex gap-3">
-                        <img src="<?php echo "$row2[profile_Img]" ?>" class="w-9 h-9 rounded-full" alt="">
+                        <img src="<?php echo "$row2[profile_img]" ?>" class="w-9 h-9 rounded-full" alt="">
                         <input placeholder="Write a comment..."
                             class="flex-1 bg-white/10 focus:bg-white/15 transition rounded-full px-4 py-2 outline-none text-sm" />
                     </div>

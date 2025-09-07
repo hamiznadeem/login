@@ -1,18 +1,68 @@
 <?php
 require "db_connect.php";
-$fname = $surname = $phone = $email = $password = $dob = $gender = "";
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["fname"]) && isset($_POST["surname"]) && isset($_POST["phone"]) && isset($_POST["email"]) && isset($_POST["password"])) {
-    $fname = $_POST["fname"];
-    $surname = $_POST["surname"];
-    $phone = $_POST["phone"];
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    $dob = $_POST["dob"];
-    $gender = $_POST["gender"];
 
-    if(empty($fname) && empty($surname) && empty($phone) && empty($email) && empty($password) && empty($dob) && empty($gender) && empty($gender)) {
-        header("Location: ".$_SERVER['PHP_SELF']."?success=0");
+function test_input($data){
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+$formDetails = true;
+$fname = $surname = $phone = $email = $password = $dob = $gender = "";
+$fnameErr = $surnameErr = $phoneErr = $emailErr = $passwordErr = $dobErr = $genderErr = "";
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register_form"])) {
+    $fname = ucfirst(test_input($_POST["fname"]));
+    if(empty($fname)){
+        $fnameErr = "First name is required";
+        $formDetails = false;
+    }elseif (!preg_match("/^[a-zA-Z-' ]*$/", $fname)) {
+            $fnameErr = "Only letters and white space allowed";
+            $formDetails = false;
+    }else{
+        $formDetails = true;
+    }
+
+    $surname = ucfirst(test_input($_POST["surname"]));
+    if(empty($surname)){
+        $surnameErr = "Surname is required";
+        $formDetails = false;
+    }elseif (!preg_match("/^[a-zA-Z-' ]*$/", $surname)) {
+            $surnameErr = "Only letters and white space allowed";
+            $formDetails = false;
+    }else{
+        $formDetails = true;
+    }
+    
+    $phone = test_input( $_POST["phone"]);
+    if(empty($phone)){
+        $phoneErr = "Phone number is required";
+        $formDetails = false;
+    }elseif (!preg_match("/^[0-9-]*$/", $phone)) {
+            $phoneErr = "Only Numbers allowed";
+            $formDetails = false;
+        }else{
+            $formDetails = true;
+        }
+    
+    $email = test_input($_POST["email"]);
+    if(empty($email)){
+        $emailErr = "Email is required";
+        $formDetails = false;
+    }elseif (!preg_match("/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/", $email)) {
+            $emailErr = "Enter a valid email";
+            $formDetails = false;
+    }else{
+        $formDetails = true;
+    }
+
+    $password = test_input($_POST["password"]);
+    $dob = test_input($_POST["dob"]);
+    $gender = test_input( $_POST["gender"]);
+    
+    if($formDetails){
+        if(empty($fname) || empty($surname) || empty($phone) || empty($email) || empty($password) || empty($dob) || empty($gender)){
         echo "<script>alert('All fields are required.');</script>";
+        // header("Location: ".$_SERVER['PHP_SELF']."?success=0");
     }else{
         $sql =
         "INSERT INTO login_info (fname, surname, phone, email, password, dob, gender) 
@@ -20,11 +70,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["fname"]) && isset($_PO
     $result = mysqli_query($conn, $sql);
     if ($result === TRUE) {
         $record = true;
-        header("Location: ".$_SERVER['PHP_SELF']."?success=1");
+        // header("Location: ".$_SERVER['PHP_SELF']."?success=1");
         echo "<script>console.log('" . $record . "');</script>";
     }
     }
-
+    }
 }
 ?>
 
@@ -89,50 +139,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["fname"]) && isset($_PO
                 class="absolute top-3 right-3 text-gray-600 hover:text-black text-xl font-bold">&times;</button>
 
             <!-- Header -->
-            <div class="mb-4">
+            <div class="mb-3">
                 <h2 class="text-2xl font-bold">Create a new account</h2>
-                <p class="text-gray-600 text-sm">It’s quick and easy.</p>
             </div>
-            <hr class="mb-4">
+            <hr class="mb-2">
 
             <!-- Registration Form -->
             <form class="space-y-3" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-                <div class="flex space-x-3">
-                    <input id="fname" name="fname" type="text" placeholder="First name"
-                        class="w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
-                    <input id="surname" name="surname" type="text" placeholder="Surname"
-                        class="w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                <div class="grid grid-cols-1">
+                        <span class="text-sm text-red-600"> <?php echo "$fnameErr"?></span>
+                        <input id="fname" name="fname" type="text" placeholder="First name"
+                        class=" px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                </div>
+                <div class="grid grid-cols-1">
+                        <span class="text-sm text-red-600"> <?php echo "$surnameErr"?></span>
+                        <input id="surname" name="surname" type="text" placeholder="Surname"
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
                 </div>
 
+                <span class="text-red-600"> <?php echo "$phoneErr"?></span>
                 <input id="phone" name="phone" type="text" placeholder="Mobile number"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
-
+                    <span class="text-red-600"> <?php echo "$emailErr"?></span>
                 <input id="email" name="email" type="text" placeholder="Email address"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
-
                 <input id="password" name="password" type="password" placeholder="New password"
                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
 
                 <!-- Birthday -->
-                <div>
-                    <label class="text-sm text-gray-700 font-medium">Birthday</label>
-                    <div class="flex space-x-2 mt-1">
-                        <input id="dob" name="dob" type="date" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                    </div>
-                </div>
-
-                <!-- Gender -->
-                <div>
-                    <label class="text-sm text-gray-700 font-medium">Gender</label>
-                    <div class="flex space-x-4 mt-1">
-                        <label class="flex items-center space-x-2 border border-gray-300 rounded-lg px-3 py-2 w-1/3">
-                            <input id="gender" type="radio" name="gender" value="male">
-                            <span>Male</span>
-                        </label>
-                        <label class="flex items-center space-x-2 border border-gray-300 rounded-lg px-3 py-2 w-1/3">
-                            <input id="gender" type="radio" name="gender" value="female">
-                            <span>Female</span>
-                        </label>
+                <div class="grid grid-cols-2 gap-2">
+                    <input id="dob" name="dob" type="date" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    <div>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-zinc-500" name="gender" id="gender">
+                            <option class="px-2 py-1 border-gray-300 rounded-lg" value="Male">Male</option>
+                            <option class="px-2 py-1 border-gray-300 rounded-lg" value="Female">Female</option>
+                        </select>
                     </div>
                 </div>
 
@@ -142,7 +183,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["fname"]) && isset($_PO
                 </p>
 
                 <!-- Submit -->
-                <button type="submit"
+                <button type="submit" name="register_form"
                     class="w-full bg-green-600 text-white py-2.5 rounded-lg font-semibold hover:bg-green-700 transition">
                     Sign Up
                 </button>
