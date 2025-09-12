@@ -7,10 +7,12 @@ function test_input($data){
     $data = htmlspecialchars($data);
     return $data;
 }
-$formDetails = true;
+$formDetails = false;
 $fname = $surname = $phone = $email = $password = $dob = $gender = "";
 $fnameErr = $surnameErr = $phoneErr = $emailErr = $passwordErr = $dobErr = $genderErr = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register_form"])) {
+
     $fname = ucfirst(test_input($_POST["fname"]));
     if(empty($fname)){
         $fnameErr = "First name is required";
@@ -40,9 +42,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register_form"])) {
     }elseif (!preg_match("/^[0-9-]*$/", $phone)) {
             $phoneErr = "Only Numbers allowed";
             $formDetails = false;
-        }else{
+    }else{
             $formDetails = true;
-        }
+    }
     
     $email = test_input($_POST["email"]);
     if(empty($email)){
@@ -60,21 +62,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register_form"])) {
     $gender = test_input( $_POST["gender"]);
     
     if($formDetails){
-        if(empty($fname) || empty($surname) || empty($phone) || empty($email) || empty($password) || empty($dob) || empty($gender)){
-        echo "<script>alert('All fields are required.');</script>";
-        // header("Location: ".$_SERVER['PHP_SELF']."?success=0");
-    }else{
         $sql =
-        "INSERT INTO login_info (fname, surname, phone, email, password, dob, gender) 
-    VALUES ('$fname', '$surname', '$phone', '$email', '$password', '$dob', '$gender')";
-    $result = mysqli_query($conn, $sql);
-    if ($result === TRUE) {
-        $record = true;
-        // header("Location: ".$_SERVER['PHP_SELF']."?success=1");
-        echo "<script>console.log('" . $record . "');</script>";
-    }
-    }
-    }
+            "INSERT INTO login_info (fname, surname, phone, email, password, dob, gender) 
+            VALUES ('$fname', '$surname', '$phone', '$email', '$password', '$dob', '$gender')";
+            $result = mysqli_query($conn, $sql);
+        }else{
+            echo "<script>alert('All fields are required.');</script>";
+        }
 }
 ?>
 
@@ -110,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register_form"])) {
                             class="w-full mb-3 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
                         <input id="loginPass" name="loginPass" type="password" placeholder="Password"
                             class="w-full mb-3 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                        <button type="submit"
+                        <button type="submit" name="login_form"
                             class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Log In</button>
                     </form>
 
